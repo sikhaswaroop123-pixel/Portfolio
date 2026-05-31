@@ -18,6 +18,8 @@ type CountUpProps = {
   delay?: number;
   /** Reset key to re-trigger animation */
   resetKey?: string | number;
+  /** When set, skips per-element inView and uses this instead (for grouped metrics) */
+  start?: boolean;
 };
 
 function getParts(value: number, format: MetricFormat) {
@@ -61,15 +63,21 @@ export function CountUp({
   className = "",
   delay = 0,
   resetKey,
+  start,
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const selfInView = useInView(ref, {
+    once: true,
+    // Trigger slightly before the element enters the viewport (helps mobile)
+    margin: "0px 0px 120px 0px",
+  });
+  const active = start ?? selfInView;
   const reduced = useReducedMotion();
   const { digits } = getParts(value, format);
   const [display, setDisplay] = useState(reduced ? digits : 0);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!active) return;
     if (reduced) {
       setDisplay(digits);
       return;
@@ -84,7 +92,7 @@ export function CountUp({
     });
 
     return () => controls.stop();
-  }, [inView, reduced, digits, delay, resetKey]);
+  }, [active, reduced, digits, delay, resetKey]);
 
   return (
     <span ref={ref} className={className}>

@@ -5,12 +5,15 @@ import { CountUp } from "@/components/ui/CountUp";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
-import { EASE_OUT, VIEWPORT_ONCE } from "@/components/ui/motionPresets";
+import { EASE_OUT } from "@/components/ui/motionPresets";
 
 export function ImpactNumbers() {
   const reduced = useReducedMotion();
   const gridRef = useRef<HTMLDivElement>(null);
-  const gridInView = useInView(gridRef, VIEWPORT_ONCE);
+  const gridInView = useInView(gridRef, {
+    once: true,
+    margin: "0px 0px 120px 0px",
+  });
 
   return (
     <section
@@ -44,6 +47,7 @@ export function ImpactNumbers() {
                 value={metric.value}
                 format={metric.format}
                 delay={i * 100}
+                start={gridInView}
               />
             </p>
             <p className="mt-4 text-text text-sm md:text-base leading-relaxed">
