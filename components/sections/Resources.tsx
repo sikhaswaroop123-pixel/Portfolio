@@ -5,6 +5,7 @@ import {
   featuredResources,
   resourceArticles,
   type ResourceItem,
+  type ResourceArticle,
 } from "@/content/resources";
 import { site } from "@/content/site";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
@@ -73,14 +74,16 @@ function FeaturedResourceCard({
                 {item.secondaryLabel}
               </a>
             )}
-            <button
-              type="button"
-              onClick={onToggle}
-              className="section-label text-muted hover:text-text transition-colors"
-              aria-expanded={isOpen}
-            >
-              {isOpen ? "collapse ↑" : "read more →"}
-            </button>
+            {item.expandedDescription && (
+              <button
+                type="button"
+                onClick={onToggle}
+                className="section-label text-muted hover:text-text transition-colors"
+                aria-expanded={isOpen}
+              >
+                {isOpen ? "collapse ↑" : "read more →"}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -125,8 +128,68 @@ function ComingSoonCard({ item }: { item: ResourceItem }) {
   );
 }
 
+function ArticleRow({
+  article,
+  isOpen,
+  onToggle,
+}: {
+  article: ResourceArticle;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const isLive = article.status === "live" && "paragraphs" in article;
+
+  return (
+    <li className="border-b border-white/5 text-muted">
+      <div className="flex items-center justify-between gap-4 py-4">
+        <span className="text-text text-sm md:text-base font-serif leading-snug">
+          {article.title}
+        </span>
+        {isLive ? (
+          <button
+            type="button"
+            onClick={onToggle}
+            className="section-label shrink-0 text-accent hover:underline"
+            aria-expanded={isOpen}
+          >
+            {isOpen ? "collapse ↑" : "read →"}
+          </button>
+        ) : (
+          <span className="section-label shrink-0">coming soon</span>
+        )}
+      </div>
+
+      <AnimatePresence initial={false}>
+        {isOpen && isLive && "paragraphs" in article && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: EASE_OUT }}
+            className="overflow-hidden"
+          >
+            <article className="pb-8 max-w-3xl">
+              <div className="space-y-4 text-muted text-xs md:text-sm leading-relaxed">
+                {article.paragraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                ))}
+              </div>
+              {"author" in article && article.author && (
+                <p className="mt-8 section-label text-text">{article.author}</p>
+              )}
+            </article>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
+  );
+}
+
 export function Resources() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedArticleId, setExpandedArticleId] = useState<string | null>(
+    null
+  );
 
   return (
     <SectionShell id="resources" label="09 · resources">
@@ -157,15 +220,16 @@ export function Resources() {
         <p className="section-label mb-6">articles</p>
         <ul className="space-y-3">
           {resourceArticles.map((article) => (
-            <li
-              key={article.title}
-              className="flex items-center justify-between gap-4 py-4 border-b border-white/5 text-muted"
-            >
-              <span className="text-text text-sm md:text-base">
-                {article.title}
-              </span>
-              <span className="section-label shrink-0">coming soon</span>
-            </li>
+            <ArticleRow
+              key={article.id}
+              article={article}
+              isOpen={expandedArticleId === article.id}
+              onToggle={() =>
+                setExpandedArticleId((current) =>
+                  current === article.id ? null : article.id
+                )
+              }
+            />
           ))}
         </ul>
       </div>
