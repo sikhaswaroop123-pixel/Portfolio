@@ -4,6 +4,15 @@ export const journeyIntro = {
     "From Sambalpur to London and back — tap any stop for the full chapter.",
 };
 
+/** Key stops shown before “see full journey” */
+export const featuredJourneyIds = [
+  "born",
+  "bayes",
+  "edt",
+  "home-reset",
+  "bengaluru",
+] as const;
+
 export type JourneyStep = {
   id: string;
   year: string;

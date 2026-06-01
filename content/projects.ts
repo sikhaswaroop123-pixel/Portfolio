@@ -17,6 +17,9 @@ export const projectsIntro = {
     "Academic, corporate, and personal builds — strategy and execution in equal measure.",
 };
 
+/** Shown on the homepage before “see more” */
+export const featuredProjectIds = ["cookr", "edt-tam", "invitewithme"] as const;
+
 export const projects: Project[] = [
   {
     id: "cookr",

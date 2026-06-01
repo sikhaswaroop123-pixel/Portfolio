@@ -39,6 +39,8 @@ export const featuredResources: ResourceItem[] = [
     category: "ai · cift framework · 12 ready-to-use prompts",
     description:
       "Most AI prompts are bad. Here's a framework that makes them better — and 12 prompts already structured this way, across procurement and marketing workflows.",
+    expandedDescription:
+      "Walk through the CIFT framework and copy 12 ready-made prompts — written the way I'd actually use them with clients.",
     imageKey: "toolkit-ai-prompts",
     imageSrc: "/assets/toolkit-ai-prompts-preview.png",
     demoHref: "/demos/ai-prompts",

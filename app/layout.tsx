@@ -44,8 +44,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${fraunces.variable} ${inter.variable} ${jetbrains.variable}`}
+      suppressHydrationWarning
     >
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <SmoothScroll>
           <HashScroll />
           <CustomCursor />

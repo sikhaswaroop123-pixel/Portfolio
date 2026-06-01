@@ -1,5 +1,6 @@
 "use client";
 
+import { ArticleList } from "@/components/articles/ArticleList";
 import { site } from "@/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -91,7 +92,8 @@ export function Contact() {
       </div>
 
       <footer className="mt-14 pt-8 border-t border-white/5">
-        <p className="section-label">
+        <ArticleList />
+        <p className="section-label mt-10">
           © 2026 {site.name.toLowerCase()} · procurement & marketing strategist
         </p>
       </footer>

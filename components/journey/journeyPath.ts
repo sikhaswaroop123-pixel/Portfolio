@@ -1,22 +1,17 @@
 export type PathPoint = { x: number; y: number };
 
-/** Smooth cubic path through milestone centres with a gentle horizontal weave */
-export function buildWavyPath(points: PathPoint[], weave = 6): string {
+/** Smooth cubic path through milestone centres */
+export function buildWavyPath(points: PathPoint[]): string {
   if (points.length === 0) return "";
   if (points.length === 1) {
     return `M ${points[0].x} ${points[0].y}`;
   }
 
-  const woven = points.map((p, i) => ({
-    x: p.x + (i % 2 === 0 ? -weave : weave),
-    y: p.y,
-  }));
+  let d = `M ${points[0].x} ${points[0].y}`;
 
-  let d = `M ${woven[0].x} ${woven[0].y}`;
-
-  for (let i = 1; i < woven.length; i++) {
-    const prev = woven[i - 1];
-    const curr = woven[i];
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1];
+    const curr = points[i];
     const midY = (prev.y + curr.y) / 2;
     d += ` C ${prev.x} ${midY}, ${curr.x} ${midY}, ${curr.x} ${curr.y}`;
   }
@@ -33,4 +28,25 @@ export function milestoneDotSize(
   if (isHere) return 14;
   const t = total <= 1 ? 1 : index / (total - 1);
   return 8 + t * 4;
+}
+
+/** Schedule path measurement after layout + motion settle */
+export function schedulePathMeasure(measure: () => void): () => void {
+  let raf1 = 0;
+  let raf2 = 0;
+  const timers: ReturnType<typeof setTimeout>[] = [];
+
+  raf1 = requestAnimationFrame(() => {
+    raf2 = requestAnimationFrame(measure);
+  });
+
+  for (const ms of [50, 200, 450, 750]) {
+    timers.push(setTimeout(measure, ms));
+  }
+
+  return () => {
+    cancelAnimationFrame(raf1);
+    cancelAnimationFrame(raf2);
+    timers.forEach(clearTimeout);
+  };
 }

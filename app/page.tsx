@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { Intro } from "@/components/sections/Intro";
 import { ImpactNumbers } from "@/components/sections/ImpactNumbers";
-import { TwoHalves } from "@/components/sections/TwoHalves";
 import { WhatIDo } from "@/components/sections/WhatIDo";
 import { Work } from "@/components/sections/Work";
 import { Projects } from "@/components/sections/Projects";
@@ -16,7 +15,6 @@ export default function Home() {
       <Hero />
       <Intro />
       <ImpactNumbers />
-      <TwoHalves />
       <WhatIDo />
       <Work />
       <Projects />

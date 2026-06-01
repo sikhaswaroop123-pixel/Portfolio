@@ -6,6 +6,7 @@ type PlaceholderImageProps = {
   src?: string;
   className?: string;
   priority?: boolean;
+  imageClassName?: string;
 };
 
 const aspectClasses = {
@@ -22,6 +23,7 @@ export function PlaceholderImage({
   src,
   className = "",
   priority = false,
+  imageClassName = "object-cover",
 }: PlaceholderImageProps) {
   if (src) {
     return (
@@ -32,7 +34,7 @@ export function PlaceholderImage({
           src={src}
           alt={label}
           fill
-          className="object-cover"
+          className={imageClassName}
           priority={priority}
           sizes="(max-width: 768px) 100vw, 50vw"
         />
